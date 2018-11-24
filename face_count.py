@@ -29,6 +29,7 @@ def count(path, rate=10):
     files = sorted(listdir(path))
     i = 0
     for f in files:
+        i += 1
         if i % rate != 0:
             continue
 
