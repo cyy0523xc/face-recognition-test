@@ -5,6 +5,7 @@
 # Created Time: 2018年11月23日 星期五 21时50分48秒
 import cv2
 from os import listdir
+from datetime import datetime
 import face_recognition as fr
 
 faces = []
@@ -19,15 +20,19 @@ def save_new_face(img, filename, locs):
     cv2.imwrite('/tmp/'+filename, img)
 
 
-def count(path):
+def count(path, rate=8):
     """统计一个目录下的图片的人脸数量"""
     if not path.endswith('/'):
         path += '/'
 
     global faces, new_face_files, faces_count
     files = sorted(listdir(path))
+    i = 0
     for f in files:
-        print('*'*40, f)
+        if i % rate != 0:
+            continue
+
+        print(datetime.now(), f)
         img = fr.load_image_file(path+f)
         f_locations = fr.face_locations(img, model='cnn')
         if len(f_locations) == 0:
@@ -64,6 +69,7 @@ def count(path):
 
 if __name__ == '__main__':
     print(count('/var/www/tmp/faces/save'))
-    print(new_face_files)
     for i in faces_count:
         print(i)
+
+    print(new_face_files)

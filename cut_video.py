@@ -7,7 +7,7 @@ import cv2
 from os import makedirs
 
 
-def cut(path, save_path, time_freq=25):
+def cut(path, save_path, time_freq=100):
     vc = cv2.VideoCapture(path)
     if vc.isOpened() is False:
         raise Exception('视频文件打开失败')
@@ -29,6 +29,6 @@ def cut(path, save_path, time_freq=25):
 
 if __name__ == '__main__':
     v_path = '/var/www/tmp/faces/20180109-1-053700053162-506-1354-201801090000000563-2.mp4'
-    save_path = '/var/www/tmp/faces/save'
+    save_path = '/var/www/tmp/faces/detect-label'
     makedirs(save_path, exist_ok=True)
     cut(v_path, save_path)
