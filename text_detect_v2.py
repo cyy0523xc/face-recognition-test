@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#
+# 文本模块提取（效果太差）
 # Author: alex
 # Created Time: 2018年11月24日 星期六 11时50分50秒
 import sys
