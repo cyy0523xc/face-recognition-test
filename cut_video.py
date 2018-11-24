@@ -28,7 +28,7 @@ def cut(path, save_path, time_freq=25):
 
 
 if __name__ == '__main__':
-    v_path = '/var/www/tmp/faces/20180109-1-053700053162-506-1354-201801090000000563-2.mp4'
+    v_path = '/var/www/tmp/faces/v01.mp4'
     save_path = '/var/www/tmp/faces/save'
     makedirs(save_path, exist_ok=True)
     cut(v_path, save_path)
