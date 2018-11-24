@@ -20,7 +20,7 @@ def save_new_face(img, filename, locs):
     cv2.imwrite('/tmp/'+filename, img)
 
 
-def count(path, rate=8):
+def count(path, rate=10):
     """统计一个目录下的图片的人脸数量"""
     if not path.endswith('/'):
         path += '/'
@@ -34,7 +34,8 @@ def count(path, rate=8):
 
         print(datetime.now(), f)
         img = fr.load_image_file(path+f)
-        f_locations = fr.face_locations(img, model='cnn')
+        f_locations = fr.face_locations(img, number_of_times_to_upsample=0,
+                                        model='cnn')
         if len(f_locations) == 0:
             # 没有识别到人脸
             faces_count.append((f, 0))
