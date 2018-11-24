@@ -8,8 +8,8 @@ from imageai.Prediction.Custom import ModelTraining
 model_trainer = ModelTraining()
 model_trainer.setModelTypeAsResNet()
 model_trainer.setDataDirectory("/var/www/tmp/faces/model")
-model_trainer.trainModel(num_objects=1,
-                         num_experiments=10,
+model_trainer.trainModel(num_objects=3,
+                         num_experiments=30,
                          enhance_data=True,
-                         batch_size=32,
+                         batch_size=8,
                          show_network_summary=True)
