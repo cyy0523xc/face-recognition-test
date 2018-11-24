@@ -30,7 +30,7 @@ def count(path, rate=10):
     i = 0
     for f in files:
         i += 1
-        if i % rate != 0:
+        if i % rate != 2:
             continue
 
         print(datetime.now(), f)
