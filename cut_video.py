@@ -7,7 +7,7 @@ import cv2
 from os import makedirs
 
 
-def cut(path, save_path, time_freq=100):
+def cut(path, save_path, time_freq=1):
     vc = cv2.VideoCapture(path)
     if vc.isOpened() is False:
         raise Exception('视频文件打开失败')
@@ -16,14 +16,22 @@ def cut(path, save_path, time_freq=100):
         save_path += '/'
 
     c = 1
+    total_img = 0
+    mod = int(vc.get(cv2.CAP_PROP_FPS)) * time_freq
+    if mod < 2:
+        mod = 2
+
     while rval:
         rval, frame = vc.read()
-        if c % time_freq == 0:
+        if c % mod == 0:
+            total_img += 1
             cv2.imwrite(save_path + '%08d.jpg' % c, frame)
 
         c += 1
         cv2.waitKey(1)
 
+    print("Total Frame: ", c)
+    print("Total Image: ", total_img)
     vc.release()
 
 
