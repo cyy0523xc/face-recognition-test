@@ -70,7 +70,8 @@ def count(path, rate=10):
 
 
 if __name__ == '__main__':
-    print(count('/var/www/tmp/faces/save'))
+    import sys
+    print(count(sys.argv[1]))
     for i in faces_count:
         print(i)
 
