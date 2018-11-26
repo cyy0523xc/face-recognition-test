@@ -36,7 +36,13 @@ def cut(path, save_path, time_freq=1):
 
 
 if __name__ == '__main__':
-    v_path = '/var/www/tmp/faces/v01.mp4'
-    save_path = '/var/www/tmp/faces/detect-label'
+    from os import listdir
+    v_path = '/var/www/tmp/faces/videos/'
+    save_path = '/var/www/tmp/faces/screenshot/'
     makedirs(save_path, exist_ok=True)
-    cut(v_path, save_path)
+    for fn in listdir(v_path):
+        if fn.endswith('.mp4') is False:
+            continue
+        print('Filename: ', fn)
+        makedirs(save_path+fn+'/', exist_ok=True)
+        cut(v_path + fn, save_path+fn+'/')
