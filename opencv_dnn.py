@@ -21,6 +21,7 @@ def path_detect(path):
     for fn in filenames:
         if fn.endswith(('jpg', 'jpeg', 'png')) is False:
             continue
+        print("===> ", fn)
         image = cv2.imread(os.path.join(path, fn))
         face_detect(image)
 
@@ -48,6 +49,7 @@ def face_detect(image):
         cv2.rectangle(image, (xLeftBottom, yLeftBottom),
                       (xRightTop, yRightTop), (0, 255, 0))
         label = "face: %.4f" % confidence
+        print(label)
         labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX,
                                               0.5, 1)
 
@@ -57,7 +59,7 @@ def face_detect(image):
         cv2.putText(image, label, (xLeftBottom, yLeftBottom),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
-    cv2.imshow("detections", image)
+    cv2.imshow("dnn-detect", image)
     cv2.waitKey(0)
 
 
