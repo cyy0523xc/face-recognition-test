@@ -18,12 +18,21 @@ net = dnn.readNetFromCaffe(prototxt, caffemodel)
 
 def path_detect(path):
     filenames = sorted(os.listdir(path))
+    files = []
     for fn in filenames:
         if fn.endswith(('jpg', 'jpeg', 'png')) is False:
             continue
-        print("===> ", fn)
         image = cv2.imread(os.path.join(path, fn))
-        face_detect(image)
+        locations = face_detect(image)
+        if len(locations) > 0:
+            confidences = [i[0] for i in locations]
+            files.append((fn, locations, max(confidences)))
+
+    files = sorted(files, key=lambda x: x[2], reverse=True)[:5]
+    for fn, locations, _ in files:
+        print(fn, locations)
+        image = cv2.imread(os.path.join(path, fn))
+        show_image(image, locations)
 
 
 def face_detect(image):
@@ -37,26 +46,32 @@ def face_detect(image):
     perf_stats = net.getPerfProfile()
     print('Inference time, ms: %.2f' % (perf_stats[0] / cv2.getTickFrequency() * 1000))
 
+    locations = []
     for i in range(detections.shape[2]):
         confidence = detections[0, 0, i, 2]
         if confidence < confThreshold:
             continue
-        xLeftBottom = int(detections[0, 0, i, 3] * cols)
-        yLeftBottom = int(detections[0, 0, i, 4] * rows)
-        xRightTop = int(detections[0, 0, i, 5] * cols)
-        yRightTop = int(detections[0, 0, i, 6] * rows)
+        left = int(detections[0, 0, i, 3] * cols)
+        top = int(detections[0, 0, i, 4] * rows)
+        right = int(detections[0, 0, i, 5] * cols)
+        bottom = int(detections[0, 0, i, 6] * rows)
+        locations.append([confidence, (left, top), (right, bottom)])
 
-        cv2.rectangle(image, (xLeftBottom, yLeftBottom),
-                      (xRightTop, yRightTop), (0, 255, 0))
+    return locations
+
+
+def show_image(image, locations, wait=0):
+    for confidence, (left, top), (right, bottom) in locations:
+        cv2.rectangle(image, (left, top),
+                      (right, bottom), (0, 255, 0))
         label = "face: %.4f" % confidence
-        print(label)
         labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX,
                                               0.5, 1)
 
-        cv2.rectangle(image, (xLeftBottom, yLeftBottom - labelSize[1]),
-                      (xLeftBottom + labelSize[0], yLeftBottom + baseLine),
+        cv2.rectangle(image, (left, top - labelSize[1]),
+                      (left + labelSize[0], top + baseLine),
                       (255, 255, 255), cv2.FILLED)
-        cv2.putText(image, label, (xLeftBottom, yLeftBottom),
+        cv2.putText(image, label, (left, top),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
     cv2.imshow("dnn-detect", image)
